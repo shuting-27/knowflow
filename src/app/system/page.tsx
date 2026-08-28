@@ -21,6 +21,16 @@ export default async function SystemPage() {
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {[
             ["PostgreSQL", "知识、向量与查询日志持久化", health.database],
+            [
+              "FastAPI AI Service",
+              health.aiService
+                ? "Python AI编排服务连接正常"
+                : (
+                    health.aiServiceError ??
+                    "Python AI服务不可用"
+                  ),
+              health.aiService,
+            ],
             ["Ollama", `服务探测耗时 ${health.latencyMs}ms`, health.ollama],
             [health.chatModel, "本地回答与知识分析模型", hasChatModel],
             [health.embeddingModel, "文档及查询向量模型", hasEmbeddingModel],
