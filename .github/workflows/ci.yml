@@ -1,0 +1,99 @@
+name: KnowFlow CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: knowflow-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Web Quality Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.6-pg17-trixie
+        env:
+          POSTGRES_USER: knowflow
+          POSTGRES_PASSWORD: knowflow
+          POSTGRES_DB: knowflow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U knowflow -d knowflow"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://knowflow:knowflow@127.0.0.1:5432/knowflow
+      AI_SERVICE_URL: http://127.0.0.1:8000
+      OLLAMA_BASE_URL: http://127.0.0.1:11434
+      OLLAMA_CHAT_MODEL: qwen3:1.7b
+      OLLAMA_EMBEDDING_MODEL: nomic-embed-text-v2-moe
+      RAG_TOP_K: "5"
+      RAG_MIN_SCORE: "0.35"
+      RAG_MMR_LAMBDA: "0.70"
+      RAG_CONTEXT_CHARS: "2000"
+      RAG_CHUNK_SIZE: "700"
+      RAG_CHUNK_OVERLAP: "120"
+      RAG_MAX_CHUNKS: "40"
+      OLLAMA_TIMEOUT_MS: "120000"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply database migrations
+        run: npx prisma db migrate
+
+      - name: Run web quality gate
+        run: npm run verify
+
+  ai-service:
+    name: AI Service Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    defaults:
+      run:
+        working-directory: ai-service
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: ai-service/requirements.txt
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Check Python formatting
+        run: python -m ruff format --check app tests
+
+      - name: Run Python lint
+        run: python -m ruff check app tests
+
+      - name: Run Python tests
+        run: python -m pytest -q
