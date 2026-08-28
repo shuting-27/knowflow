@@ -1,0 +1,146 @@
+[
+  {
+    "id": "architecture-01",
+    "question": "KnowFlow的前端、AI服务和数据库分别使用什么技术？",
+    "relevantIds": [9],
+    "shouldReject": false
+  },
+  {
+    "id": "architecture-02",
+    "question": "系统中Next.js与FastAPI分别承担什么职责？",
+    "relevantIds": [9],
+    "shouldReject": false
+  },
+  {
+    "id": "indexing-01",
+    "question": "知识创建时如何进行文档分块和向量化？",
+    "relevantIds": [10],
+    "shouldReject": false
+  },
+  {
+    "id": "indexing-02",
+    "question": "为什么文本分块之间需要保留重叠区域？",
+    "relevantIds": [10],
+    "shouldReject": false
+  },
+  {
+    "id": "vector-01",
+    "question": "系统如何利用pgvector召回相关文本？",
+    "relevantIds": [11],
+    "shouldReject": false
+  },
+  {
+    "id": "vector-02",
+    "question": "同一篇长文档召回多个分块时如何处理？",
+    "relevantIds": [11],
+    "shouldReject": false
+  },
+  {
+    "id": "hybrid-01",
+    "question": "混合检索分数由哪些部分组成？",
+    "relevantIds": [12],
+    "shouldReject": false
+  },
+  {
+    "id": "hybrid-02",
+    "question": "Embedding服务不可用时搜索还能工作吗？",
+    "relevantIds": [12],
+    "shouldReject": false
+  },
+  {
+    "id": "mmr-01",
+    "question": "KnowFlow如何避免检索结果包含大量重复内容？",
+    "relevantIds": [13],
+    "shouldReject": false
+  },
+  {
+    "id": "mmr-02",
+    "question": "最大边际相关性排序同时考虑哪些因素？",
+    "relevantIds": [13],
+    "shouldReject": false
+  },
+  {
+    "id": "transaction-01",
+    "question": "更新知识时某个数据库操作失败会发生什么？",
+    "relevantIds": [14],
+    "shouldReject": false
+  },
+  {
+    "id": "transaction-02",
+    "question": "删除知识后关联的向量分块如何清理？",
+    "relevantIds": [14],
+    "shouldReject": false
+  },
+  {
+    "id": "grounding-01",
+    "question": "知识不足时系统是否会自行编造答案？",
+    "relevantIds": [15],
+    "shouldReject": false
+  },
+  {
+    "id": "grounding-02",
+    "question": "用户如何核对智能问答使用了哪些知识来源？",
+    "relevantIds": [15],
+    "shouldReject": false
+  },
+  {
+    "id": "performance-01",
+    "question": "系统记录了哪些大模型性能指标？",
+    "relevantIds": [16],
+    "shouldReject": false
+  },
+  {
+    "id": "performance-02",
+    "question": "怎样减少Ollama每次请求重新加载模型的时间？",
+    "relevantIds": [16],
+    "shouldReject": false
+  },
+  {
+    "id": "pipeline-01",
+    "question": "从知识创建到向量索引写入需要经过哪些处理？",
+    "relevantIds": [10, 14],
+    "shouldReject": false
+  },
+  {
+    "id": "pipeline-02",
+    "question": "用户提问后系统如何完成向量召回和结果排序？",
+    "relevantIds": [11, 12, 13],
+    "shouldReject": false
+  },
+  {
+    "id": "pipeline-03",
+    "question": "如何保证知识正文与向量索引不会出现不一致？",
+    "relevantIds": [14],
+    "shouldReject": false
+  },
+  {
+    "id": "pipeline-04",
+    "question": "如何约束模型依据检索内容回答并提供证据？",
+    "relevantIds": [15],
+    "shouldReject": false
+  },
+  {
+    "id": "reject-01",
+    "question": "公司员工请假审批需要经过哪些部门？",
+    "relevantIds": [],
+    "shouldReject": true
+  },
+  {
+    "id": "reject-02",
+    "question": "明天北京的天气和降雨概率是多少？",
+    "relevantIds": [],
+    "shouldReject": true
+  },
+  {
+    "id": "reject-03",
+    "question": "卷积神经网络如何完成高光谱图像分类？",
+    "relevantIds": [],
+    "shouldReject": true
+  },
+  {
+    "id": "reject-04",
+    "question": "如何实现用户注册、密码加密和权限认证？",
+    "relevantIds": [],
+    "shouldReject": true
+  }
+]
