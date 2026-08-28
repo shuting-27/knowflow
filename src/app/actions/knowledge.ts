@@ -15,7 +15,7 @@ type EmbeddingApiResponse = {
   embeddings: number[][];
   latency_ms: number;
 };
-
+const EMBEDDING_DIMENSIONS = 768;
 type PreparedDocumentChunk = {
   index: number;
   start: number;
@@ -145,6 +145,85 @@ async function generateEmbedding(
   return embedding;
 }
 
+async function searchKnowledgeChunks(
+  queryEmbedding: number[],
+  limit: number
+) {
+  if (
+    queryEmbedding.length !==
+      EMBEDDING_DIMENSIONS ||
+    queryEmbedding.some(
+      (value) => !Number.isFinite(value)
+    )
+  ) {
+    throw new Error("查询向量格式不正确");
+  }
+
+  if (!Number.isInteger(limit) || limit <= 0) {
+    throw new Error("向量召回数量不正确");
+  }
+
+  return await db.transaction(
+    async (transaction) => {
+      const plan =
+        transaction.sql.public.knowledge_chunk
+          .select("postId")
+          .select("chunkIndex")
+          .select("text")
+          .select(
+            "similarity",
+            (fields, functions) =>
+              functions.cosineSimilarity(
+                fields.embedding,
+                queryEmbedding
+              )
+          )
+          .orderBy(
+            (fields, functions) =>
+              functions.cosineDistance(
+                fields.embedding,
+                queryEmbedding
+              ),
+            {
+              direction: "asc",
+            }
+          )
+          .limit(limit)
+          .build();
+      const startedAt =
+        performance.now();
+      const rows =
+        await transaction.query(plan);
+
+      if (
+        rows.some(
+          (row) =>
+            !Number.isInteger(row.postId) ||
+            !Number.isInteger(row.chunkIndex) ||
+            typeof row.text !== "string" ||
+            !Number.isFinite(row.similarity)
+        )
+      ) {
+        throw new Error(
+          "pgvector返回的检索结果格式不正确"
+        );
+      }
+
+      console.log("pgvector召回完成:", {
+        limit,
+        retrieved: rows.length,
+        latencyMs: Number(
+          (
+            performance.now() -
+            startedAt
+          ).toFixed(2)
+        ),
+      });
+
+      return rows;
+    }
+  );
+}
 
 async function generateKnowledgeEmbedding(
   title: string,
@@ -240,7 +319,6 @@ async function generateKnowledgeEmbedding(
   };
 }
 
-const EMBEDDING_DIMENSIONS = 768;
 
 function buildKnowledgeChunkRows(
   postId: number,
@@ -419,20 +497,55 @@ export async function getKnowledgeList(
       return filteredPosts;
     }
 
-    // 4. 生成搜索词 embedding
-    const searchEmbedding = await generateEmbedding(search);
+    const TOP_K =
+      aiConfig.retrievalTopK;
 
-    console.log(
-      "搜索 Embedding 生成成功:",
-      searchEmbedding.length
-    );
+    const semanticScores =
+      new Map<number, number>();
 
+    let semanticAvailable = false;
+
+    try {
+      const searchEmbedding =
+        await generateEmbedding(search);
+
+      console.log(
+        "搜索 Embedding 生成成功:",
+        searchEmbedding.length
+      );
+
+      const vectorCandidates =
+        await searchKnowledgeChunks(
+          searchEmbedding,
+          Math.max(TOP_K * 4, 20)
+        );
+
+      for (const candidate of vectorCandidates) {
+        const current =
+          semanticScores.get(
+            candidate.postId
+          ) ?? Number.NEGATIVE_INFINITY;
+
+        semanticScores.set(
+          candidate.postId,
+          Math.max(
+            current,
+            candidate.similarity
+          )
+        );
+      }
+
+      semanticAvailable = true;
+    } catch (semanticError) {
+      console.error(
+        "语义检索不可用，降级为关键词搜索:",
+        semanticError
+      );
+    }
     // 6. 计算每篇知识的语义相似度
     const scoredPosts = filteredPosts.map((post) => {
-      let semanticScore = 0;
-
-      semanticScore = bestChunkMatch(searchEmbedding, post.embedding)?.score ?? 0;
-
+      const semanticScore =
+        semanticScores.get(post.id) ?? 0;
       // 7. 保留传统关键词搜索
       const title =
         post.title?.toLowerCase() ?? "";
@@ -448,15 +561,22 @@ export async function getKnowledgeList(
         `${title}\n${content}\n${aiTags}`
       );
 
+      const titleExact =
+        title.includes(keyword);
+
       const exactMatch =
-        title.includes(keyword) ||
+        titleExact ||
         content.includes(keyword) ||
         aiTags.includes(keyword);
 
       const finalScore =
-        semanticScore * 0.8 +
-        lexicalScore * 0.15 +
-        (exactMatch ? 0.05 : 0);
+        semanticAvailable
+          ? semanticScore * 0.8 +
+            lexicalScore * 0.15 +
+            (exactMatch ? 0.05 : 0)
+          : lexicalScore * 0.7 +
+            (exactMatch ? 0.2 : 0) +
+            (titleExact ? 0.1 : 0);
       
       console.log(
         "搜索相关度:",
@@ -478,10 +598,10 @@ export async function getKnowledgeList(
     });
 
     // 8. 设置最低相关度
-    const MIN_SCORE = aiConfig.searchMinScore;
-
-    // 9. 最多返回前 5 个最相关结果
-    const TOP_K = aiConfig.retrievalTopK;
+    const MIN_SCORE =
+      semanticAvailable
+        ? aiConfig.searchMinScore
+        : 0.3;
 
     // 10. 先过滤，再排序，再限制数量
     const relevantPosts = scoredPosts
@@ -489,6 +609,12 @@ export async function getKnowledgeList(
       .sort((a, b) => b._score - a._score)
       .slice(0, TOP_K);
 
+    console.log(
+      "搜索模式:",
+      semanticAvailable
+        ? "hybrid"
+        : "lexical-fallback"
+    );
     console.log(
       "最终搜索结果:",
       relevantPosts.map((post) => ({
