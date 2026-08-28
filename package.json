@@ -12,7 +12,8 @@
     "verify": "npm run lint && npm run typecheck && npm run build",
     "evaluate": "node scripts/evaluate-retrieval.mjs",
     "postinstall": "prisma skills sync || exit 0",
-    "contract:emit": "prisma contract emit"
+    "contract:emit": "prisma contract emit",
+    "backfill:chunks": "node scripts/backfill-knowledge-chunks.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.19.0",
