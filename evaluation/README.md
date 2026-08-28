@@ -92,3 +92,14 @@ Reject Accuracy 仅表示检索阶段没有返回超过阈值的候选，不等�
 
 ```bash
 npm run evaluate -- evaluation/rag-retrieval.json evaluation/results-final.json
+```
+
+完整结果保存在 `evaluation/results-final.json`。
+
+## 8. 局限性
+
+- 当前评测集规模较小，为 24 条人工标注的项目领域问题
+- 评测结果只代表当前知识库和测试问题，不能泛化到开放领域
+- 当前主要评估检索效果，尚未覆盖生成答案的忠实度与完整性
+- 无关查询仅有 4 条，需要继续扩展负样本和困难负样本
+- 后续应增加独立测试集，避免参数选择对当前评测集产生过拟合
