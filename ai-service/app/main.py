@@ -8,6 +8,10 @@ from app.schemas.analysis import (
     AnalysisRequest,
     AnalysisResponse,
 )
+from app.schemas.document import (
+    DocumentPrepareRequest,
+    DocumentPrepareResponse,
+)
 from app.schemas.embedding import (
     EmbeddingRequest,
     EmbeddingResponse,
@@ -15,6 +19,9 @@ from app.schemas.embedding import (
 from app.services.analysis import (
     AnalysisServiceError,
     analyze_knowledge,
+)
+from app.services.document import (
+    prepare_document as prepare_document_service,
 )
 from app.services.embedding import (
     EmbeddingServiceError,
@@ -106,3 +113,29 @@ async def analyze(
             status_code=(status.HTTP_502_BAD_GATEWAY),
             detail=str(error),
         ) from error
+
+
+@app.post(
+    "/api/v1/documents/prepare",
+    response_model=DocumentPrepareResponse,
+)
+async def prepare_document_endpoint(
+    request: DocumentPrepareRequest,
+) -> DocumentPrepareResponse:
+    try:
+        return await prepare_document_service(request)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    except EmbeddingServiceError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Embedding服务暂时不可用",
+        ) from exc
+    except RuntimeError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="文档处理服务返回异常结果",
+        ) from exc
