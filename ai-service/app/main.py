@@ -82,6 +82,7 @@ async def embeddings(
         result = await generate_embeddings(
             texts=request.texts,
             model=request.model,
+            input_type=request.input_type,
         )
 
         return EmbeddingResponse(**result)

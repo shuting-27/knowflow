@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     ollama_base_url: str = "http://127.0.0.1:11434"
     ollama_chat_model: str = "qwen3:1.7b"
-    ollama_embedding_model: str = "nomic-embed-text"
+    ollama_embedding_model: str = "nomic-embed-text-v2-moe"
     ollama_timeout_seconds: float = 120.0
     ollama_keep_alive: str = "10m"
 

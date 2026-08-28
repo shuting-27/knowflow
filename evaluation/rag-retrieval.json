@@ -8,7 +8,7 @@
   {
     "id": "architecture-02",
     "question": "系统中Next.js与FastAPI分别承担什么职责？",
-    "relevantIds": [9],
+    "relevantIds": [9,6],
     "shouldReject": false
   },
   {

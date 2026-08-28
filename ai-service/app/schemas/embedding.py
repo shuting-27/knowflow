@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -7,6 +9,7 @@ class EmbeddingRequest(BaseModel):
         max_length=32,
     )
     model: str | None = None
+    input_type: Literal["query", "document"] = "query"
 
     @field_validator("texts")
     @classmethod

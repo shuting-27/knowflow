@@ -1,5 +1,5 @@
 from time import perf_counter
-from typing import Any
+from typing import Any, Literal
 
 import httpx
 
@@ -13,8 +13,13 @@ class EmbeddingServiceError(Exception):
 async def generate_embeddings(
     texts: list[str],
     model: str | None = None,
+    input_type: Literal["query", "document"] = "query",
 ) -> dict[str, Any]:
     selected_model = model or settings.ollama_embedding_model
+
+    prefix = "search_query: " if input_type == "query" else "search_document: "
+
+    prepared_texts = [f"{prefix}{text}" for text in texts]
 
     started_at = perf_counter()
 
@@ -26,7 +31,7 @@ async def generate_embeddings(
                 (f"{settings.ollama_base_url}/api/embed"),
                 json={
                     "model": selected_model,
-                    "input": texts,
+                    "input": prepared_texts,
                     "truncate": True,
                     "keep_alive": (settings.ollama_keep_alive),
                 },

@@ -9,7 +9,7 @@ export const aiConfig = {
   chatModel: process.env.OLLAMA_CHAT_MODEL ?? "qwen3:1.7b",
   embeddingModel: process.env.OLLAMA_EMBEDDING_MODEL ?? "nomic-embed-text",
   retrievalTopK: numberFromEnv("RAG_TOP_K", 5),
-  retrievalMinScore: numberFromEnv("RAG_MIN_SCORE", 0.55),
+  retrievalMinScore: numberFromEnv("RAG_MIN_SCORE", 0.35),
   mmrLambda: numberFromEnv("RAG_MMR_LAMBDA", 0.7),
   contextCharsPerDocument: numberFromEnv("RAG_CONTEXT_CHARS", 2000),
   chunkSize: numberFromEnv("RAG_CHUNK_SIZE", 700),
