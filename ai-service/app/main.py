@@ -4,9 +4,17 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
+from app.schemas.analysis import (
+    AnalysisRequest,
+    AnalysisResponse,
+)
 from app.schemas.embedding import (
     EmbeddingRequest,
     EmbeddingResponse,
+)
+from app.services.analysis import (
+    AnalysisServiceError,
+    analyze_knowledge,
 )
 from app.services.embedding import (
     EmbeddingServiceError,
@@ -72,6 +80,28 @@ async def embeddings(
         return EmbeddingResponse(**result)
 
     except EmbeddingServiceError as error:
+        raise HTTPException(
+            status_code=(status.HTTP_502_BAD_GATEWAY),
+            detail=str(error),
+        ) from error
+
+
+@app.post(
+    "/api/v1/analyze",
+    response_model=AnalysisResponse,
+)
+async def analyze(
+    request: AnalysisRequest,
+) -> AnalysisResponse:
+    try:
+        result = await analyze_knowledge(
+            title=request.title,
+            content=request.content,
+        )
+
+        return AnalysisResponse(**result)
+
+    except AnalysisServiceError as error:
         raise HTTPException(
             status_code=(status.HTTP_502_BAD_GATEWAY),
             detail=str(error),

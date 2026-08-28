@@ -4,6 +4,7 @@ const numberFromEnv = (name: string, fallback: number) => {
 };
 
 export const aiConfig = {
+  aiServiceUrl: process.env.AI_SERVICE_URL ?? "http://127.0.0.1:8000",
   ollamaBaseUrl: process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434",
   chatModel: process.env.OLLAMA_CHAT_MODEL ?? "qwen3:1.7b",
   embeddingModel: process.env.OLLAMA_EMBEDDING_MODEL ?? "nomic-embed-text",
@@ -15,4 +16,5 @@ export const aiConfig = {
   chunkOverlap: numberFromEnv("RAG_CHUNK_OVERLAP", 120),
   maxChunksPerKnowledge: numberFromEnv("RAG_MAX_CHUNKS", 40),
   requestTimeoutMs: numberFromEnv("OLLAMA_TIMEOUT_MS", 120000),
+  searchMinScore: numberFromEnv("SEARCH_MIN_SCORE", 0.5),
 };

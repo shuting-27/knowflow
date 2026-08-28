@@ -8,40 +8,167 @@ import { splitTextIntoChunks } from "@/lib/chunking";
 
 const DEMO_EMAIL = "demo@knowflow.local";
 
-async function generateEmbedding(text: string): Promise<number[]> {
+type EmbeddingApiResponse = {
+  model: string;
+  count: number;
+  dimensions: number;
+  embeddings: number[][];
+  latency_ms: number;
+};
+
+async function requestEmbeddingBatch(
+  texts: string[]
+): Promise<number[][]> {
   const response = await fetch(
-    `${aiConfig.ollamaBaseUrl}/api/embeddings`,
+    `${aiConfig.aiServiceUrl}/api/v1/embeddings`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: aiConfig.embeddingModel,
-        prompt: text,
+        texts,
       }),
-      signal: AbortSignal.timeout(aiConfig.requestTimeoutMs),
+      signal: AbortSignal.timeout(
+        aiConfig.requestTimeoutMs
+      ),
     }
   );
 
   if (!response.ok) {
+    const errorText = await response.text();
+
     throw new Error(
-      `Ollama Embedding 请求失败: ${response.status}`
+      `AI服务Embedding请求失败: ` +
+      `${response.status} ${errorText}`
     );
   }
 
-  const data = await response.json();
+  const data =
+    (await response.json()) as EmbeddingApiResponse;
 
-  if (!Array.isArray(data.embedding)) {
-    throw new Error("Ollama 没有返回 embedding");
+  if (
+    !Array.isArray(data.embeddings) ||
+    data.embeddings.length !== texts.length
+  ) {
+    throw new Error(
+      "AI服务返回的Embedding数量不正确"
+    );
   }
 
-  console.log(
-    "Embedding 生成成功，维度:",
-    data.embedding.length
+  if (
+    data.dimensions <= 0 ||
+    data.embeddings.some(
+      (embedding) =>
+        !Array.isArray(embedding) ||
+        embedding.length !== data.dimensions
+    )
+  ) {
+    throw new Error(
+      "AI服务返回的Embedding维度不一致"
+    );
+  }
+
+  console.log("Embedding批次完成:", {
+    count: data.count,
+    dimensions: data.dimensions,
+    latencyMs: data.latency_ms,
+  });
+
+  return data.embeddings;
+}
+
+
+async function generateEmbeddings(
+  texts: string[]
+): Promise<number[][]> {
+  if (texts.length === 0) {
+    return [];
+  }
+
+  // FastAPI单次最多接受32条。
+  // 考虑8GB内存设备，使用更保守的16条。
+  const batchSize = 16;
+  const embeddings: number[][] = [];
+
+  for (
+    let start = 0;
+    start < texts.length;
+    start += batchSize
+  ) {
+    const batch = texts.slice(
+      start,
+      start + batchSize
+    );
+
+    const batchEmbeddings =
+      await requestEmbeddingBatch(batch);
+
+    embeddings.push(...batchEmbeddings);
+  }
+
+  return embeddings;
+}
+
+
+async function generateEmbedding(
+  text: string
+): Promise<number[]> {
+  const embeddings =
+    await generateEmbeddings([text]);
+
+  const embedding = embeddings[0];
+
+  if (!embedding) {
+    throw new Error(
+      "AI服务没有返回Embedding"
+    );
+  }
+
+  return embedding;
+}
+
+
+async function generateKnowledgeEmbedding(
+  title: string,
+  content: string
+): Promise<EmbeddingPayload> {
+  const source =
+    `标题：${title}\n\n${content}`.trim();
+
+  const chunks = splitTextIntoChunks(
+    source,
+    aiConfig.chunkSize,
+    aiConfig.chunkOverlap,
+    aiConfig.maxChunksPerKnowledge
   );
 
-  return data.embedding;
+  if (chunks.length === 0) {
+    throw new Error(
+      "知识内容无法生成有效Chunk"
+    );
+  }
+
+  const vectors = await generateEmbeddings(
+    chunks.map((chunk) => chunk.text)
+  );
+
+  if (vectors.length !== chunks.length) {
+    throw new Error(
+      "Chunk数量与Embedding数量不一致"
+    );
+  }
+
+  return {
+    version: 2,
+    model: aiConfig.embeddingModel,
+    chunks: chunks.map(
+      (chunk, index) => ({
+        ...chunk,
+        embedding: vectors[index],
+      })
+    ),
+  };
 }
 
 
@@ -151,23 +278,30 @@ export async function getKnowledgeList(
       const aiTags =
         post.aiTags?.toLowerCase() ?? "";
 
-      const keywordMatch =
+      const lexicalScore = lexicalOverlap(
+        keyword,
+        `${title}\n${content}\n${aiTags}`
+      );
+
+      const exactMatch =
         title.includes(keyword) ||
         content.includes(keyword) ||
         aiTags.includes(keyword);
 
-      // 关键词匹配给予额外加分
       const finalScore =
-        semanticScore * 0.85 +
-        (keywordMatch ? 0.15 : 0);
+        semanticScore * 0.8 +
+        lexicalScore * 0.15 +
+        (exactMatch ? 0.05 : 0);
       
       console.log(
         "搜索相关度:",
         post.title,
         "semantic:",
         semanticScore.toFixed(4),
-        "keyword:",
-        keywordMatch,
+        "lexical:",
+        lexicalScore.toFixed(4),
+        "exact:",
+        exactMatch,
         "final:",
         finalScore.toFixed(4)
       );
@@ -179,10 +313,10 @@ export async function getKnowledgeList(
     });
 
     // 8. 设置最低相关度
-    const MIN_SCORE = 0.65;
+    const MIN_SCORE = aiConfig.searchMinScore;
 
     // 9. 最多返回前 5 个最相关结果
-    const TOP_K = 5;
+    const TOP_K = aiConfig.retrievalTopK;
 
     // 10. 先过滤，再排序，再限制数量
     const relevantPosts = scoredPosts
@@ -622,128 +756,127 @@ export async function generateAiAnalysis(
   }
 }
 
-async function analyzeKnowledge(id: number) {
-  // 查询知识
-  const knowledge = await db.orm.public.Post
-    .where({ id })
-    .first();
+type AnalysisApiResponse = {
+  summary: string;
+  tags: string[];
+  model: string;
+  latency_ms: number;
+};
 
-  if (!knowledge) {
-    throw new Error("知识不存在");
-  }
 
-  console.log(
-    "开始 AI 分析:",
-    id,
-    knowledge.title
-  );
-
+async function requestKnowledgeAnalysis(
+  title: string,
+  content: string
+): Promise<AnalysisApiResponse> {
   const response = await fetch(
-    `${aiConfig.ollamaBaseUrl}/api/generate`,
+    `${aiConfig.aiServiceUrl}/api/v1/analyze`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: aiConfig.chatModel,
-
-        prompt: `
-请分析下面这篇知识内容。
-
-请严格返回 JSON，不要返回 Markdown，不要返回解释。
-
-格式必须是：
-
-{
-  "summary": "一句到两句话的中文摘要",
-  "tags": [
-    "标签1",
-    "标签2",
-    "标签3",
-    "标签4"
-  ]
-}
-
-要求：
-
-1. summary 必须简洁准确
-2. tags 返回 3~5 个最重要的标签
-3. 标签使用中文或常见技术名称
-4. 不要出现 # 符号
-5. 只返回 JSON
-
-标题：
-${knowledge.title}
-
-内容：
-${knowledge.content ?? ""}
-        `,
-
-        stream: false,
-        think: false,
-
-        options: {
-          temperature: 0.2,
-          num_predict: 200,
-        },
+        title,
+        content,
       }),
+      signal: AbortSignal.timeout(
+        aiConfig.requestTimeoutMs
+      ),
     }
   );
 
   if (!response.ok) {
+    const errorText = await response.text();
+
     throw new Error(
-      `Ollama 请求失败: ${response.status}`
+      `AI分析服务请求失败: ` +
+      `${response.status} ${errorText}`
     );
   }
 
-  const data = await response.json();
+  const data =
+    (await response.json()) as AnalysisApiResponse;
+
+  if (!data.summary?.trim()) {
+    throw new Error(
+      "AI分析服务没有返回摘要"
+    );
+  }
+
+  if (
+    !Array.isArray(data.tags) ||
+    data.tags.length === 0
+  ) {
+    throw new Error(
+      "AI分析服务没有返回标签"
+    );
+  }
+
+  return {
+    ...data,
+    summary: data.summary.trim(),
+    tags: data.tags
+      .map((tag) => tag.trim())
+      .filter(Boolean)
+      .slice(0, 5),
+  };
+}
+
+
+async function analyzeKnowledge(id: number) {
+  const knowledge =
+    await db.orm.public.Post
+      .where({ id })
+      .first();
+
+  if (!knowledge) {
+    throw new Error("知识不存在");
+  }
+
+  const content =
+    knowledge.content?.trim();
+
+  if (!content) {
+    throw new Error(
+      "知识内容为空，无法执行AI分析"
+    );
+  }
 
   console.log(
-    "Ollama AI 分析原始返回:",
-    data.response
+    "开始调用Python AI分析服务:",
+    id,
+    knowledge.title
   );
 
-  const cleanResponse = String(data.response ?? "")
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
-
-  const result = JSON.parse(cleanResponse);
-
-  const summary =
-    typeof result.summary === "string"
-      ? result.summary.trim()
-      : "";
-
-  const tags = Array.isArray(result.tags)
-    ? result.tags
-        .map((tag: unknown) =>
-          String(tag).trim()
-        )
-        .filter(Boolean)
-        .slice(0, 5)
-    : [];
-
-  if (!summary) {
-    throw new Error("AI 没有返回摘要");
-  }
+  const result =
+    await requestKnowledgeAnalysis(
+      knowledge.title,
+      content
+    );
 
   await db.orm.public.Post
     .where({ id })
     .update({
-      aiSummary: summary,
-      aiTags: serializeTags(tags),
+      aiSummary: result.summary,
+      aiTags: serializeTags(
+        result.tags
+      ),
     });
 
-  console.log(
-    "AI 分析保存成功:",
-    id
-  );
+  console.log("AI分析完成:", {
+    id,
+    model: result.model,
+    latencyMs: result.latency_ms,
+    tagCount: result.tags.length,
+  });
+
+  revalidatePath("/");
+  revalidatePath("/knowledge");
+  revalidatePath(`/knowledge/${id}`);
 
   return {
-    summary,
-    tags,
+    summary: result.summary,
+    tags: result.tags,
   };
 }
 
@@ -1662,10 +1795,3 @@ export async function importKnowledgeFile(formData: FormData) {
   redirect("/");
 }
 
-async function generateKnowledgeEmbedding(title: string, content: string): Promise<EmbeddingPayload> {
-  const source = `标题：${title}\n\n${content}`.trim();
-  const chunks = splitTextIntoChunks(source, aiConfig.chunkSize, aiConfig.chunkOverlap, aiConfig.maxChunksPerKnowledge);
-  const embedded = [];
-  for (const chunk of chunks) embedded.push({ ...chunk, embedding: await generateEmbedding(chunk.text) });
-  return { version: 2, model: aiConfig.embeddingModel, chunks: embedded };
-}
