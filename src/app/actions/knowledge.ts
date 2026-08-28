@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { aiConfig } from "@/lib/ai-config";
 import { bestChunkMatch, lexicalOverlap, parseTags, payloadSimilarity, serializeTags, type EmbeddingPayload } from "@/lib/retrieval";
-import { splitTextIntoChunks } from "@/lib/chunking";
+
 
 const DEMO_EMAIL = "demo@knowflow.local";
 
@@ -13,6 +13,23 @@ type EmbeddingApiResponse = {
   count: number;
   dimensions: number;
   embeddings: number[][];
+  latency_ms: number;
+};
+
+type PreparedDocumentChunk = {
+  index: number;
+  start: number;
+  end: number;
+  text: string;
+  embedding: number[];
+};
+
+type DocumentPrepareApiResponse = {
+  title: string;
+  model: string;
+  dimensions: number;
+  chunk_count: number;
+  chunks: PreparedDocumentChunk[];
   latency_ms: number;
 };
 
@@ -136,38 +153,90 @@ async function generateKnowledgeEmbedding(
   const source =
     `标题：${title}\n\n${content}`.trim();
 
-  const chunks = splitTextIntoChunks(
-    source,
-    aiConfig.chunkSize,
-    aiConfig.chunkOverlap,
-    aiConfig.maxChunksPerKnowledge
+  const response = await fetch(
+    `${aiConfig.aiServiceUrl}/api/v1/documents/prepare`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        content: source,
+        chunk_size: aiConfig.chunkSize,
+        chunk_overlap: aiConfig.chunkOverlap,
+        max_chunks: aiConfig.maxChunksPerKnowledge,
+      }),
+      signal: AbortSignal.timeout(
+        aiConfig.requestTimeoutMs
+      ),
+    }
   );
 
-  if (chunks.length === 0) {
+  if (!response.ok) {
+    const errorText = await response.text();
+
     throw new Error(
-      "知识内容无法生成有效Chunk"
+      `AI服务文档预处理请求失败: ` +
+      `${response.status} ${errorText}`
     );
   }
 
-  const vectors = await generateEmbeddings(
-    chunks.map((chunk) => chunk.text)
-  );
+  const data =
+    (await response.json()) as DocumentPrepareApiResponse;
 
-  if (vectors.length !== chunks.length) {
+  if (
+    !Array.isArray(data.chunks) ||
+    data.chunks.length === 0 ||
+    data.chunk_count !== data.chunks.length
+  ) {
     throw new Error(
-      "Chunk数量与Embedding数量不一致"
+      "AI服务返回的文档分块数量不正确"
     );
   }
+
+  if (
+    !Number.isInteger(data.dimensions) ||
+    data.dimensions <= 0 ||
+    data.chunks.some(
+      (chunk) =>
+        !Number.isInteger(chunk.index) ||
+        !Number.isInteger(chunk.start) ||
+        !Number.isInteger(chunk.end) ||
+        chunk.start < 0 ||
+        chunk.end <= chunk.start ||
+        typeof chunk.text !== "string" ||
+        chunk.text.length === 0 ||
+        !Array.isArray(chunk.embedding) ||
+        chunk.embedding.length !== data.dimensions ||
+        chunk.embedding.some(
+          (value) => !Number.isFinite(value)
+        )
+    )
+  ) {
+    throw new Error(
+      "AI服务返回的文档分块或向量格式不正确"
+    );
+  }
+
+  console.log("文档预处理完成:", {
+    title: data.title,
+    model: data.model,
+    chunkCount: data.chunk_count,
+    dimensions: data.dimensions,
+    latencyMs: data.latency_ms,
+  });
 
   return {
     version: 2,
-    model: aiConfig.embeddingModel,
-    chunks: chunks.map(
-      (chunk, index) => ({
-        ...chunk,
-        embedding: vectors[index],
-      })
-    ),
+    model: data.model,
+    chunks: data.chunks.map((chunk) => ({
+      index: chunk.index,
+      start: chunk.start,
+      end: chunk.end,
+      text: chunk.text,
+      embedding: chunk.embedding,
+    })),
   };
 }
 
