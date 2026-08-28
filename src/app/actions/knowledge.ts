@@ -3,7 +3,7 @@ import { db } from "@/prisma/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { aiConfig } from "@/lib/ai-config";
-import { bestChunkMatch, lexicalOverlap, parseTags, payloadSimilarity, serializeTags, type EmbeddingPayload } from "@/lib/retrieval";
+import { lexicalOverlap, parseTags, payloadSimilarity, serializeTags, type EmbeddingPayload } from "@/lib/retrieval";
 
 
 const DEMO_EMAIL = "demo@knowflow.local";
@@ -1467,10 +1467,14 @@ export async function searchKnowledgeForRAG(
       queryEmbedding.length
     );
 
-    // ==========================================
-    // 2. 获取知识库
-    // ==========================================
+    // 2. 由pgvector召回最相关的文本分块
+    const vectorCandidates =
+      await searchKnowledgeChunks(
+        queryEmbedding,
+        Math.max(limit * 6, 30)
+      );
 
+    // 3. 获取Post元数据，用于混合评分和来源展示
     const allPosts =
       await db.orm.public.Post
         .orderBy(
@@ -1478,31 +1482,84 @@ export async function searchKnowledgeForRAG(
         )
         .all();
 
-    // ==========================================
-    // 3. Cosine Similarity
-    // ==========================================
-
-    // ==========================================
-    // 4. 计算每篇知识与 Query 的语义相关度
-    // ==========================================
-
-    const scoredPosts = allPosts
-      .filter(
-        (post) => !!post.embedding
+    const postsById = new Map(
+      allPosts.map(
+        (post) => [post.id, post]
       )
-      .map((post) => {
-        const match = bestChunkMatch(queryEmbedding, post.embedding);
-        const denseScore = match?.score ?? 0;
-        const lexicalScore = lexicalOverlap(keyword, `${post.title}\n${match?.text || post.content || ""}`);
-        return {
-          post,
-          score: denseScore * 0.85 + lexicalScore * 0.15,
-          denseScore,
-          lexicalScore,
-          chunkIndex: match?.index ?? 0,
-          excerpt: match?.text || (post.content ?? "").slice(0, aiConfig.contextCharsPerDocument),
-        };
+    );
+
+    // 同一篇知识可能召回多个Chunk，只保留最高分Chunk。
+    const bestCandidateByPost =
+      new Map<
+        number,
+        (typeof vectorCandidates)[number]
+      >();
+
+    for (const candidate of vectorCandidates) {
+      const current =
+        bestCandidateByPost.get(
+          candidate.postId
+        );
+
+      if (
+        !current ||
+        candidate.similarity >
+          current.similarity
+      ) {
+        bestCandidateByPost.set(
+          candidate.postId,
+          candidate
+        );
+      }
+    }
+
+    const scoredPosts = [];
+
+    for (
+      const candidate of
+      bestCandidateByPost.values()
+    ) {
+      const post =
+        postsById.get(candidate.postId);
+
+      if (!post) {
+        continue;
+      }
+
+      const denseScore =
+        candidate.similarity;
+
+      const lexicalScore =
+        lexicalOverlap(
+          keyword,
+          [
+            post.title,
+            candidate.text,
+            post.aiTags ?? "",
+          ].join("\n")
+        );
+
+      scoredPosts.push({
+        post,
+        score:
+          denseScore * 0.85 +
+          lexicalScore * 0.15,
+        denseScore,
+        lexicalScore,
+        chunkIndex:
+          candidate.chunkIndex,
+        excerpt:
+          candidate.text.slice(
+            0,
+            aiConfig.contextCharsPerDocument
+          ),
       });
+    }
+
+    console.log("RAG pgvector候选:", {
+      chunks: vectorCandidates.length,
+      posts: scoredPosts.length,
+    });
 
     // ==========================================
     // 5. 最低相关度
