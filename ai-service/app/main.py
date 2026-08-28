@@ -1,9 +1,17 @@
 from datetime import UTC, datetime
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
+from app.schemas.embedding import (
+    EmbeddingRequest,
+    EmbeddingResponse,
+)
+from app.services.embedding import (
+    EmbeddingServiceError,
+    generate_embeddings,
+)
 from app.services.ollama import check_ollama_health
 
 app = FastAPI(
@@ -46,3 +54,25 @@ async def health() -> dict[str, object]:
             "ollama": ollama,
         },
     }
+
+
+@app.post(
+    "/api/v1/embeddings",
+    response_model=EmbeddingResponse,
+)
+async def embeddings(
+    request: EmbeddingRequest,
+) -> EmbeddingResponse:
+    try:
+        result = await generate_embeddings(
+            texts=request.texts,
+            model=request.model,
+        )
+
+        return EmbeddingResponse(**result)
+
+    except EmbeddingServiceError as error:
+        raise HTTPException(
+            status_code=(status.HTTP_502_BAD_GATEWAY),
+            detail=str(error),
+        ) from error
