@@ -1,4 +1,7 @@
 // use prisma-next
+types {
+  EmbeddingVector = pgvector.Vector(768)
+}
 
 model User {
   id        Int      @id @default(autoincrement())
@@ -18,6 +21,7 @@ model Post {
   aiSummary String?
   aiTags String?
   embedding String?
+  chunks KnowledgeChunk[]
 
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
@@ -40,4 +44,29 @@ model RAGQueryLog {
   answer        String?
 
   createdAt     TimestamptzString @default(now())
+}
+
+model KnowledgeChunk {
+  id Int @id @default(autoincrement())
+
+  post Post @relation(
+    fields: [postId],
+    references: [id],
+    onDelete: Cascade
+  )
+  postId Int
+
+  chunkIndex Int
+  text String
+  startOffset Int
+  endOffset Int
+
+  embedding EmbeddingVector
+  embeddingModel String
+
+  createdAt TimestamptzString @default(now())
+
+  @@unique([postId, chunkIndex])
+  @@index([postId])
+  @@map("knowledge_chunk")
 }
