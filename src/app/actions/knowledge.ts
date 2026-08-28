@@ -240,6 +240,78 @@ async function generateKnowledgeEmbedding(
   };
 }
 
+const EMBEDDING_DIMENSIONS = 768;
+
+function buildKnowledgeChunkRows(
+  postId: number,
+  payload: EmbeddingPayload
+) {
+  if (
+    !Number.isInteger(postId) ||
+    postId <= 0
+  ) {
+    throw new Error("无效的知识 ID");
+  }
+
+  if (!payload.model.trim()) {
+    throw new Error("Embedding模型名称不能为空");
+  }
+
+  if (payload.chunks.length === 0) {
+    throw new Error("知识分块不能为空");
+  }
+
+  const indexes = new Set<number>();
+
+  return payload.chunks.map((chunk) => {
+    if (
+      !Number.isInteger(chunk.index) ||
+      chunk.index < 0 ||
+      indexes.has(chunk.index)
+    ) {
+      throw new Error(
+        `无效或重复的Chunk索引: ${chunk.index}`
+      );
+    }
+
+    indexes.add(chunk.index);
+
+    if (
+      !Array.isArray(chunk.embedding) ||
+      chunk.embedding.length !==
+        EMBEDDING_DIMENSIONS ||
+      chunk.embedding.some(
+        (value) => !Number.isFinite(value)
+      )
+    ) {
+      throw new Error(
+        `Chunk ${chunk.index} 的向量维度不正确`
+      );
+    }
+
+    if (
+      !chunk.text.trim() ||
+      !Number.isInteger(chunk.start) ||
+      !Number.isInteger(chunk.end) ||
+      chunk.start < 0 ||
+      chunk.end <= chunk.start
+    ) {
+      throw new Error(
+        `Chunk ${chunk.index} 的文本位置不正确`
+      );
+    }
+
+    return {
+      postId,
+      chunkIndex: chunk.index,
+      text: chunk.text,
+      startOffset: chunk.start,
+      endOffset: chunk.end,
+      embedding: chunk.embedding,
+      embeddingModel: payload.model,
+    };
+  });
+}
 
 export async function createKnowledge(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
@@ -253,35 +325,59 @@ export async function createKnowledge(formData: FormData) {
     // 模型不可用时不写入半成品记录。
     const embedding = await generateKnowledgeEmbedding(title, content);
 
-    // 1. 查找 demo 用户
-    let user = await db.orm.public.User
-      .where({
-        email: DEMO_EMAIL,
-      })
-      .first();
+    const post = await db.transaction(
+      async (transaction) => {
+        let user =
+          await transaction.orm.public.User
+            .where({
+              email: DEMO_EMAIL,
+            })
+            .first();
 
-    // 2. 如果用户不存在，就创建
-    if (!user) {
-      user = await db.orm.public.User.create({
-        email: DEMO_EMAIL,
-        username: "demo",
-        name: "KnowFlow Demo",
-      });
-    }
+        if (!user) {
+          user =
+            await transaction.orm.public.User.create({
+              email: DEMO_EMAIL,
+              username: "demo",
+              name: "KnowFlow Demo",
+            });
+        }
 
-    // 3. 创建知识
-    const post = await db.orm.public.Post.create({
-      title,
-      content: content || null,
-      authorId: user.id,
-      embedding: JSON.stringify(embedding),
-    });
+        const createdPost =
+          await transaction.orm.public.Post.create({
+            title,
+            content: content || null,
+            authorId: user.id,
+            embedding: JSON.stringify(embedding),
+          });
+
+        const chunkRows =
+          buildKnowledgeChunkRows(
+            createdPost.id,
+            embedding
+          );
+
+        await transaction.orm.public.KnowledgeChunk
+          .createAll(chunkRows);
+
+        return createdPost;
+      }
+    );
 
     console.log("知识创建成功:", title);
     console.log("知识 ID:", post.id);
 
     console.log(
       "Embedding 保存成功:",
+      post.id,
+      "Chunk 数:",
+      embedding.chunks.length
+    );
+    console.log("知识创建成功:", title);
+    console.log("知识 ID:", post.id);
+
+    console.log(
+      "Embedding 与 pgvector Chunk 保存成功:",
       post.id,
       "Chunk 数:",
       embedding.chunks.length
@@ -525,7 +621,6 @@ export async function updateKnowledge(
   }
 
   try {
-    // 1. 确认知识存在
     const knowledge = await db.orm.public.Post
       .where({ id })
       .first();
@@ -536,56 +631,60 @@ export async function updateKnowledge(
 
     console.log("开始更新知识:", id);
 
-    // 2. 更新标题和内容
-    await db.orm.public.Post
-      .where({ id })
-      .update({
+    // 数据库发生变化前先完成耗时的AI处理。
+    const embedding =
+      await generateKnowledgeEmbedding(
         title,
-        content: content || null,
+        content
+      );
 
-        // 内容变化后，旧 AI 分析失效
-        aiSummary: null,
-        aiTags: null,
+    await db.transaction(
+      async (transaction) => {
+        await transaction.orm.public.Post
+          .where({ id })
+          .update({
+            title,
+            content: content || null,
+            aiSummary: null,
+            aiTags: null,
+            embedding:
+              JSON.stringify(embedding),
+          });
 
-        // 先清除旧 embedding
-        embedding: null,
-      });
+        await transaction.orm.public.KnowledgeChunk
+          .where({
+            postId: id,
+          })
+          .deleteAll();
 
-    console.log("知识内容更新成功:", id);
+        const chunkRows =
+          buildKnowledgeChunkRows(
+            id,
+            embedding
+          );
 
-    // 3. 重新生成 embedding
-    console.log("开始重新生成 Embedding:", id);
-
-    const embedding = await generateKnowledgeEmbedding(title, content);
-
-    // 4. 保存新的 embedding
-    await db.orm.public.Post
-      .where({ id })
-      .update({
-        embedding: JSON.stringify(embedding),
-      });
+        await transaction.orm.public.KnowledgeChunk
+          .createAll(chunkRows);
+      }
+    );
 
     console.log(
-      "Embedding 更新成功:",
+      "知识与pgvector索引更新成功:",
       id,
       "Chunk 数:",
       embedding.chunks.length
     );
 
-    await analyzeKnowledge(id);
-
     console.log(
-      "AI 摘要和标签更新成功:",
+      "知识内容已更新，AI分析等待按需重新生成:",
       id
     );
 
-    // 5. 刷新页面缓存
     revalidatePath("/");
     revalidatePath(`/knowledge/${id}`);
     revalidatePath(`/knowledge/${id}/edit`);
 
     console.log("知识更新完成:", id);
-
   } catch (error) {
     console.error("更新知识失败:", error);
     throw new Error("更新知识失败");
@@ -1822,25 +1921,72 @@ ${context}
 }
 
 export async function reindexAllKnowledge() {
-  const posts = await db.orm.public.Post.all();
+  const posts =
+    await db.orm.public.Post.all();
+
   let updated = 0;
   let failed = 0;
+  let chunks = 0;
 
   for (const post of posts) {
     try {
-      const payload = await generateKnowledgeEmbedding(post.title, post.content ?? "");
-      await db.orm.public.Post.where({ id: post.id }).update({ embedding: JSON.stringify(payload) });
-      updated++;
+      const payload =
+        await generateKnowledgeEmbedding(
+          post.title,
+          post.content ?? ""
+        );
+
+      await db.transaction(
+        async (transaction) => {
+          await transaction.orm.public.Post
+            .where({
+              id: post.id,
+            })
+            .update({
+              embedding:
+                JSON.stringify(payload),
+            });
+
+          await transaction.orm.public.KnowledgeChunk
+            .where({
+              postId: post.id,
+            })
+            .deleteAll();
+
+          const chunkRows =
+            buildKnowledgeChunkRows(
+              post.id,
+              payload
+            );
+
+          await transaction.orm.public.KnowledgeChunk
+            .createAll(chunkRows);
+        }
+      );
+
+      updated += 1;
+      chunks += payload.chunks.length;
     } catch (error) {
-      failed++;
-      console.error("知识重建索引失败:", post.id, error);
+      failed += 1;
+
+      console.error(
+        "知识重建索引失败:",
+        post.id,
+        error
+      );
     }
   }
 
   revalidatePath("/");
   revalidatePath("/knowledge");
   revalidatePath("/system");
-  console.log("知识索引重建完成:", { total: posts.length, updated, failed });
+
+  console.log("知识索引重建完成:", {
+    total: posts.length,
+    updated,
+    failed,
+    chunks,
+  });
 }
 
 export async function importKnowledgeFile(formData: FormData) {
