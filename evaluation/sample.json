@@ -1,0 +1,16 @@
+[
+  {
+    "question": "示例问题：React Server Components 的作用是什么？",
+    "relevantIds": [1],
+    "rankedIds": [1, 3, 2],
+    "shouldReject": false,
+    "rejected": false
+  },
+  {
+    "question": "知识库之外的问题应当拒答",
+    "relevantIds": [],
+    "rankedIds": [],
+    "shouldReject": true,
+    "rejected": true
+  }
+]
