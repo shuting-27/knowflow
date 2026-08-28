@@ -1,0 +1,1447 @@
+{
+  "generatedAt": "2026-08-28T19:45:25.299Z",
+  "configuration": {
+    "topK": 5,
+    "minScore": 0.45,
+    "mmrLambda": 0.7,
+    "aiServiceUrl": "http://127.0.0.1:8000"
+  },
+  "summary": {
+    "dataset": "evaluation\\rag-retrieval.json",
+    "questions": 24,
+    "positiveQuestions": 20,
+    "negativeQuestions": 4,
+    "hitAt1": 0.6,
+    "hitAt3": 0.9,
+    "hitAt5": 0.95,
+    "mrr": 0.7433333333333334,
+    "rejectAccuracy": 0,
+    "averageTotalLatencyMs": 284.18019166666676,
+    "p95TotalLatencyMs": 341.33559999999943,
+    "averageEmbeddingLatencyMs": 215.88041666666672,
+    "averageVectorLatencyMs": 48.938212500000105,
+    "p95VectorLatencyMs": 52.71469999999954
+  },
+  "details": [
+    {
+      "id": "architecture-01",
+      "question": "KnowFlow的前端、AI服务和数据库分别使用什么技术？",
+      "relevantIds": [
+        9
+      ],
+      "rankedIds": [
+        12,
+        13,
+        8,
+        10,
+        15
+      ],
+      "rejected": false,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 339.56,
+      "embeddingLatencyMs": 273.46,
+      "vectorLatencyMs": 17.96,
+      "results": [
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.6401,
+          "denseScore": 0.7432,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.6299,
+          "denseScore": 0.7215,
+          "lexicalScore": 0.1111,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.629,
+          "denseScore": 0.7106,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.6394,
+          "denseScore": 0.7424,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.6302,
+          "denseScore": 0.7316,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "architecture-02",
+      "question": "系统中Next.js与FastAPI分别承担什么职责？",
+      "relevantIds": [
+        9
+      ],
+      "rankedIds": [
+        6,
+        12,
+        9,
+        10,
+        7
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 3,
+      "totalLatencyMs": 345.12,
+      "embeddingLatencyMs": 275.83,
+      "vectorLatencyMs": 51.3,
+      "results": [
+        {
+          "id": 6,
+          "title": "FastAPI测试知识",
+          "score": 0.7194,
+          "denseScore": 0.8192,
+          "lexicalScore": 0.1538,
+          "chunkIndex": 0
+        },
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.6281,
+          "denseScore": 0.7118,
+          "lexicalScore": 0.1538,
+          "chunkIndex": 0
+        },
+        {
+          "id": 9,
+          "title": "KnowFlow 系统架构",
+          "score": 0.6275,
+          "denseScore": 0.6975,
+          "lexicalScore": 0.2308,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.6122,
+          "denseScore": 0.6931,
+          "lexicalScore": 0.1538,
+          "chunkIndex": 0
+        },
+        {
+          "id": 7,
+          "title": "Python文档预处理测试",
+          "score": 0.605,
+          "denseScore": 0.6982,
+          "lexicalScore": 0.0769,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "indexing-01",
+      "question": "知识创建时如何进行文档分块和向量化？",
+      "relevantIds": [
+        10
+      ],
+      "rankedIds": [
+        10,
+        13,
+        8,
+        15,
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 312.43,
+      "embeddingLatencyMs": 233.31,
+      "vectorLatencyMs": 55.7,
+      "results": [
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.6696,
+          "denseScore": 0.6996,
+          "lexicalScore": 0.5,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5801,
+          "denseScore": 0.6604,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5924,
+          "denseScore": 0.6529,
+          "lexicalScore": 0.25,
+          "chunkIndex": 2
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5816,
+          "denseScore": 0.6622,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.5619,
+          "denseScore": 0.617,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "indexing-02",
+      "question": "为什么文本分块之间需要保留重叠区域？",
+      "relevantIds": [
+        10
+      ],
+      "rankedIds": [
+        10,
+        15,
+        8,
+        13,
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 297,
+      "embeddingLatencyMs": 235,
+      "vectorLatencyMs": 48.25,
+      "results": [
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.6404,
+          "denseScore": 0.6983,
+          "lexicalScore": 0.3125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5624,
+          "denseScore": 0.6396,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5462,
+          "denseScore": 0.6095,
+          "lexicalScore": 0.1875,
+          "chunkIndex": 2
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5385,
+          "denseScore": 0.6225,
+          "lexicalScore": 0.0625,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.5396,
+          "denseScore": 0.5908,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "vector-01",
+      "question": "系统如何利用pgvector召回相关文本？",
+      "relevantIds": [
+        11
+      ],
+      "rankedIds": [
+        11,
+        14,
+        16,
+        9,
+        8
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 269.26,
+      "embeddingLatencyMs": 194.12,
+      "vectorLatencyMs": 49.76,
+      "results": [
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.777,
+          "denseScore": 0.8112,
+          "lexicalScore": 0.5833,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.6972,
+          "denseScore": 0.7908,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.6623,
+          "denseScore": 0.735,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 9,
+          "title": "KnowFlow 系统架构",
+          "score": 0.6181,
+          "denseScore": 0.683,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.6517,
+          "denseScore": 0.7373,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "vector-02",
+      "question": "同一篇长文档召回多个分块时如何处理？",
+      "relevantIds": [
+        11
+      ],
+      "rankedIds": [
+        8,
+        13,
+        15,
+        10,
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 5,
+      "totalLatencyMs": 266.61,
+      "embeddingLatencyMs": 195.75,
+      "vectorLatencyMs": 48.72,
+      "results": [
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.6077,
+          "denseScore": 0.6928,
+          "lexicalScore": 0.125,
+          "chunkIndex": 2
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5982,
+          "denseScore": 0.7037,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.6027,
+          "denseScore": 0.6981,
+          "lexicalScore": 0.0625,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.5866,
+          "denseScore": 0.657,
+          "lexicalScore": 0.1875,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.5996,
+          "denseScore": 0.6061,
+          "lexicalScore": 0.5625,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "hybrid-01",
+      "question": "混合检索分数由哪些部分组成？",
+      "relevantIds": [
+        12
+      ],
+      "rankedIds": [
+        12,
+        13,
+        8,
+        15,
+        10
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 258.16,
+      "embeddingLatencyMs": 194.33,
+      "vectorLatencyMs": 50.32,
+      "results": [
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.5615,
+          "denseScore": 0.5871,
+          "lexicalScore": 0.4167,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5408,
+          "denseScore": 0.6216,
+          "lexicalScore": 0.0833,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5132,
+          "denseScore": 0.6037,
+          "lexicalScore": 0,
+          "chunkIndex": 2
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.511,
+          "denseScore": 0.5865,
+          "lexicalScore": 0.0833,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.5031,
+          "denseScore": 0.5918,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "hybrid-02",
+      "question": "Embedding服务不可用时搜索还能工作吗？",
+      "relevantIds": [
+        12
+      ],
+      "rankedIds": [
+        12,
+        9,
+        10,
+        16,
+        7
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 281.24,
+      "embeddingLatencyMs": 208.34,
+      "vectorLatencyMs": 51.6,
+      "results": [
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.6559,
+          "denseScore": 0.7038,
+          "lexicalScore": 0.3846,
+          "chunkIndex": 0
+        },
+        {
+          "id": 9,
+          "title": "KnowFlow 系统架构",
+          "score": 0.5787,
+          "denseScore": 0.6537,
+          "lexicalScore": 0.1538,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.5788,
+          "denseScore": 0.6674,
+          "lexicalScore": 0.0769,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.5478,
+          "denseScore": 0.6309,
+          "lexicalScore": 0.0769,
+          "chunkIndex": 0
+        },
+        {
+          "id": 7,
+          "title": "Python文档预处理测试",
+          "score": 0.5597,
+          "denseScore": 0.6449,
+          "lexicalScore": 0.0769,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "mmr-01",
+      "question": "KnowFlow如何避免检索结果包含大量重复内容？",
+      "relevantIds": [
+        13
+      ],
+      "rankedIds": [
+        13,
+        15,
+        10,
+        8,
+        12
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 286.19,
+      "embeddingLatencyMs": 222.67,
+      "vectorLatencyMs": 50.27,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.6591,
+          "denseScore": 0.7203,
+          "lexicalScore": 0.3125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.6348,
+          "denseScore": 0.7027,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.6031,
+          "denseScore": 0.6875,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5986,
+          "denseScore": 0.6822,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.5983,
+          "denseScore": 0.6818,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "mmr-02",
+      "question": "最大边际相关性排序同时考虑哪些因素？",
+      "relevantIds": [
+        13
+      ],
+      "rankedIds": [
+        13,
+        15,
+        8,
+        12,
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 243.53,
+      "embeddingLatencyMs": 175.25,
+      "vectorLatencyMs": 52.05,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.6835,
+          "denseScore": 0.6828,
+          "lexicalScore": 0.6875,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5541,
+          "denseScore": 0.6298,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5009,
+          "denseScore": 0.5893,
+          "lexicalScore": 0,
+          "chunkIndex": 2
+        },
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.4662,
+          "denseScore": 0.5485,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.4827,
+          "denseScore": 0.5568,
+          "lexicalScore": 0.0625,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "transaction-01",
+      "question": "更新知识时某个数据库操作失败会发生什么？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [
+        14,
+        10,
+        13,
+        16,
+        15
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 238.38,
+      "embeddingLatencyMs": 177.97,
+      "vectorLatencyMs": 49.84,
+      "results": [
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.5468,
+          "denseScore": 0.5747,
+          "lexicalScore": 0.3889,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.5074,
+          "denseScore": 0.5773,
+          "lexicalScore": 0.1111,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.4846,
+          "denseScore": 0.5603,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.4604,
+          "denseScore": 0.5416,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4655,
+          "denseScore": 0.5379,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "transaction-02",
+      "question": "删除知识后关联的向量分块如何清理？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [
+        14,
+        13,
+        10,
+        15,
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 255.16,
+      "embeddingLatencyMs": 189.42,
+      "vectorLatencyMs": 50.25,
+      "results": [
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.5744,
+          "denseScore": 0.6052,
+          "lexicalScore": 0.4,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5429,
+          "denseScore": 0.6152,
+          "lexicalScore": 0.1333,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.5256,
+          "denseScore": 0.583,
+          "lexicalScore": 0.2,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5316,
+          "denseScore": 0.6019,
+          "lexicalScore": 0.1333,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.5189,
+          "denseScore": 0.5752,
+          "lexicalScore": 0.2,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "grounding-01",
+      "question": "知识不足时系统是否会自行编造答案？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [
+        15,
+        13,
+        14,
+        10,
+        5
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 341.34,
+      "embeddingLatencyMs": 263.65,
+      "vectorLatencyMs": 49.18,
+      "results": [
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5401,
+          "denseScore": 0.5648,
+          "lexicalScore": 0.4,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5379,
+          "denseScore": 0.6093,
+          "lexicalScore": 0.1333,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.5136,
+          "denseScore": 0.5689,
+          "lexicalScore": 0.2,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.5116,
+          "denseScore": 0.5783,
+          "lexicalScore": 0.1333,
+          "chunkIndex": 0
+        },
+        {
+          "id": 5,
+          "title": "React Server Components 1",
+          "score": 0.4603,
+          "denseScore": 0.5415,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "grounding-02",
+      "question": "用户如何核对智能问答使用了哪些知识来源？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [
+        13,
+        11,
+        15
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 3,
+      "totalLatencyMs": 317.43,
+      "embeddingLatencyMs": 244.11,
+      "vectorLatencyMs": 51.71,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.4744,
+          "denseScore": 0.5385,
+          "lexicalScore": 0.1111,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.4693,
+          "denseScore": 0.5227,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4688,
+          "denseScore": 0.5123,
+          "lexicalScore": 0.2222,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "performance-01",
+      "question": "系统记录了哪些大模型性能指标？",
+      "relevantIds": [
+        16
+      ],
+      "rankedIds": [
+        13,
+        16,
+        14,
+        15,
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 2,
+      "totalLatencyMs": 248.14,
+      "embeddingLatencyMs": 192,
+      "vectorLatencyMs": 48.69,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.4988,
+          "denseScore": 0.5732,
+          "lexicalScore": 0.0769,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.4566,
+          "denseScore": 0.4829,
+          "lexicalScore": 0.3077,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.4556,
+          "denseScore": 0.5089,
+          "lexicalScore": 0.1538,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4513,
+          "denseScore": 0.5173,
+          "lexicalScore": 0.0769,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.4511,
+          "denseScore": 0.5171,
+          "lexicalScore": 0.0769,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "performance-02",
+      "question": "怎样减少Ollama每次请求重新加载模型的时间？",
+      "relevantIds": [
+        16
+      ],
+      "rankedIds": [
+        16,
+        5,
+        9,
+        1,
+        4
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 298.62,
+      "embeddingLatencyMs": 230.32,
+      "vectorLatencyMs": 48.77,
+      "results": [
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.5853,
+          "denseScore": 0.6471,
+          "lexicalScore": 0.2353,
+          "chunkIndex": 0
+        },
+        {
+          "id": 5,
+          "title": "React Server Components 1",
+          "score": 0.4742,
+          "denseScore": 0.5475,
+          "lexicalScore": 0.0588,
+          "chunkIndex": 0
+        },
+        {
+          "id": 9,
+          "title": "KnowFlow 系统架构",
+          "score": 0.4673,
+          "denseScore": 0.529,
+          "lexicalScore": 0.1176,
+          "chunkIndex": 0
+        },
+        {
+          "id": 1,
+          "title": "React Server Components 4",
+          "score": 0.4676,
+          "denseScore": 0.5398,
+          "lexicalScore": 0.0588,
+          "chunkIndex": 0
+        },
+        {
+          "id": 4,
+          "title": "React Server Components 2",
+          "score": 0.4651,
+          "denseScore": 0.5368,
+          "lexicalScore": 0.0588,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "pipeline-01",
+      "question": "从知识创建到向量索引写入需要经过哪些处理？",
+      "relevantIds": [
+        10,
+        14
+      ],
+      "rankedIds": [
+        13,
+        14,
+        1,
+        10,
+        15
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 2,
+      "totalLatencyMs": 267.21,
+      "embeddingLatencyMs": 198.65,
+      "vectorLatencyMs": 47.95,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5071,
+          "denseScore": 0.5873,
+          "lexicalScore": 0.0526,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.5031,
+          "denseScore": 0.5454,
+          "lexicalScore": 0.2632,
+          "chunkIndex": 0
+        },
+        {
+          "id": 1,
+          "title": "React Server Components 4",
+          "score": 0.4795,
+          "denseScore": 0.5641,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.486,
+          "denseScore": 0.5253,
+          "lexicalScore": 0.2632,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4756,
+          "denseScore": 0.5502,
+          "lexicalScore": 0.0526,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "pipeline-02",
+      "question": "用户提问后系统如何完成向量召回和结果排序？",
+      "relevantIds": [
+        11,
+        12,
+        13
+      ],
+      "rankedIds": [
+        13,
+        8,
+        15,
+        12,
+        1
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 242.58,
+      "embeddingLatencyMs": 179.44,
+      "vectorLatencyMs": 50.15,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5457,
+          "denseScore": 0.6234,
+          "lexicalScore": 0.1053,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.4955,
+          "denseScore": 0.5736,
+          "lexicalScore": 0.0526,
+          "chunkIndex": 2
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5228,
+          "denseScore": 0.5872,
+          "lexicalScore": 0.1579,
+          "chunkIndex": 0
+        },
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.4911,
+          "denseScore": 0.5592,
+          "lexicalScore": 0.1053,
+          "chunkIndex": 0
+        },
+        {
+          "id": 1,
+          "title": "React Server Components 4",
+          "score": 0.4553,
+          "denseScore": 0.5357,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "pipeline-03",
+      "question": "如何保证知识正文与向量索引不会出现不一致？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [
+        10,
+        14,
+        15,
+        13,
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 2,
+      "totalLatencyMs": 264.19,
+      "embeddingLatencyMs": 192.78,
+      "vectorLatencyMs": 48.63,
+      "results": [
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.5824,
+          "denseScore": 0.6573,
+          "lexicalScore": 0.1579,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.5811,
+          "denseScore": 0.6,
+          "lexicalScore": 0.4737,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.554,
+          "denseScore": 0.6424,
+          "lexicalScore": 0.0526,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5361,
+          "denseScore": 0.6214,
+          "lexicalScore": 0.0526,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.5245,
+          "denseScore": 0.5985,
+          "lexicalScore": 0.1053,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "pipeline-04",
+      "question": "如何约束模型依据检索内容回答并提供证据？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [
+        13,
+        15,
+        10
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 2,
+      "totalLatencyMs": 300.67,
+      "embeddingLatencyMs": 229.62,
+      "vectorLatencyMs": 52.71,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5354,
+          "denseScore": 0.6005,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5171,
+          "denseScore": 0.5495,
+          "lexicalScore": 0.3333,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.4579,
+          "denseScore": 0.5289,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "reject-01",
+      "question": "公司员工请假审批需要经过哪些部门？",
+      "relevantIds": [],
+      "rankedIds": [
+        14,
+        13,
+        11,
+        16,
+        15
+      ],
+      "rejected": false,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 303.69,
+      "embeddingLatencyMs": 235.71,
+      "vectorLatencyMs": 49.56,
+      "results": [
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.5044,
+          "denseScore": 0.5935,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.4888,
+          "denseScore": 0.5751,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.4911,
+          "denseScore": 0.5778,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.4568,
+          "denseScore": 0.5374,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4543,
+          "denseScore": 0.5345,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "reject-02",
+      "question": "明天北京的天气和降雨概率是多少？",
+      "relevantIds": [],
+      "rankedIds": [
+        13,
+        15
+      ],
+      "rejected": false,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 274.11,
+      "embeddingLatencyMs": 214.29,
+      "vectorLatencyMs": 49.71,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.4798,
+          "denseScore": 0.5645,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4509,
+          "denseScore": 0.5304,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "reject-03",
+      "question": "卷积神经网络如何完成高光谱图像分类？",
+      "relevantIds": [],
+      "rankedIds": [
+        15,
+        14,
+        10,
+        13,
+        11
+      ],
+      "rejected": false,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 285.96,
+      "embeddingLatencyMs": 217.51,
+      "vectorLatencyMs": 51.23,
+      "results": [
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5007,
+          "denseScore": 0.589,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.4785,
+          "denseScore": 0.5629,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.4599,
+          "denseScore": 0.541,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.4772,
+          "denseScore": 0.5614,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.4779,
+          "denseScore": 0.5622,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "reject-04",
+      "question": "如何实现用户注册、密码加密和权限认证？",
+      "relevantIds": [],
+      "rankedIds": [
+        15,
+        5,
+        16,
+        12,
+        13
+      ],
+      "rejected": false,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 283.76,
+      "embeddingLatencyMs": 207.6,
+      "vectorLatencyMs": 50.21,
+      "results": [
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.493,
+          "denseScore": 0.5689,
+          "lexicalScore": 0.0625,
+          "chunkIndex": 0
+        },
+        {
+          "id": 5,
+          "title": "React Server Components 1",
+          "score": 0.4757,
+          "denseScore": 0.5597,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.4744,
+          "denseScore": 0.5582,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.489,
+          "denseScore": 0.5753,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.4866,
+          "denseScore": 0.5725,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        }
+      ]
+    }
+  ]
+}
