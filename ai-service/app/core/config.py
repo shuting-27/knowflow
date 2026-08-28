@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     ollama_chat_model: str = "qwen3:1.7b"
     ollama_embedding_model: str = "nomic-embed-text"
     ollama_timeout_seconds: float = 120.0
+    ollama_keep_alive: str = "10m"
 
     frontend_origin: str = "http://localhost:3000"
 

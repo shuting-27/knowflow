@@ -28,6 +28,7 @@ async def generate_embeddings(
                     "model": selected_model,
                     "input": texts,
                     "truncate": True,
+                    "keep_alive": (settings.ollama_keep_alive),
                 },
             )
 

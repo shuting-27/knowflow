@@ -40,6 +40,10 @@ async def analyze_knowledge(
 3. 标签使用中文或常见技术名称；
 4. 不输出思考过程；
 5. 只返回JSON。
+6. 摘要中的每个事实都必须能在原文中直接找到依据；
+7. 原文没有明确描述的作用、优势、效果和因果关系不得补充；
+8. 不得使用“提升、优化、增强、降低、确保”等效果词，除非原文明确包含；
+9. 优先抽取和压缩原文，不进行推测。
 
 标题：
 {title}
@@ -60,8 +64,9 @@ async def analyze_knowledge(
                     "stream": False,
                     "think": False,
                     "format": "json",
+                    "keep_alive": (settings.ollama_keep_alive),
                     "options": {
-                        "temperature": 0.2,
+                        "temperature": 0.0,
                         "num_predict": 256,
                     },
                 },
