@@ -13,7 +13,8 @@
     "evaluate": "node scripts/evaluate-retrieval.mjs",
     "postinstall": "prisma skills sync || exit 0",
     "contract:emit": "prisma contract emit",
-    "backfill:chunks": "node scripts/backfill-knowledge-chunks.mjs"
+    "backfill:chunks": "node scripts/backfill-knowledge-chunks.mjs",
+    "seed:evaluation": "node scripts/seed-evaluation-corpus.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.19.0",

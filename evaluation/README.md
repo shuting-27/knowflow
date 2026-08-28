@@ -68,32 +68,35 @@ Reject Accuracy 仅表示检索阶段没有返回超过阈值的候选，不等�
 
 ## 6. 最终性能
 
-最终配置在本地 CPU 环境的评测结果：
+最终配置在固定 8 篇评测语料、24 条人工标注问题上的结果：
 
 | 指标 | 结果 |
 |---|---:|
+| Corpus Documents | 8 |
 | Questions | 24 |
-| Hit@1 | 80.0% |
-| Hit@3 | 95.0% |
+| Hit@1 | 95.0% |
+| Hit@3 | 100.0% |
 | Hit@5 | 100.0% |
-| MRR | 0.8792 |
+| MRR | 0.9750 |
 | Reject Accuracy | 100.0% |
-| Average Total Latency | 727.09 ms |
-| P95 Total Latency | 1019.62 ms |
-| Average Embedding Latency | 655.41 ms |
-| Average pgvector Latency | 51.44 ms |
-| P95 pgvector Latency | 53.43 ms |
+| Average Total Latency | 771.73 ms |
+| P95 Total Latency | 758.52 ms |
+| Average Embedding Latency | 703.71 ms |
+| Average pgvector Latency | 50.21 ms |
+| P95 pgvector Latency | 52.92 ms |
 
-测试设备为 Intel Core i5-1035G1、8GB 内存，无 CUDA 推理环境。
+第一次查询包含约 2.65 秒的模型冷启动；后续热启动查询通常稳定在约 650～750 毫秒。测试设备为 Intel Core i5-1035G1、8GB 内存，无 CUDA 推理环境。
 
 ## 7. 复现方法
 
-确保 PostgreSQL、FastAPI 和 Ollama 正常运行，并完成知识索引重建：
+确保 PostgreSQL、FastAPI 和 Ollama 正常运行，然后执行：
 
 ```bash
+npm run seed:evaluation
 npm run evaluate -- evaluation/rag-retrieval.json evaluation/results-final.json
 ```
 
+seed:evaluation 会幂等创建或更新固定评测语料，并重新生成文档向量。评测标注使用稳定的知识标题，不依赖数据库自增 ID。
 完整结果保存在 `evaluation/results-final.json`。
 
 ## 8. 局限性
