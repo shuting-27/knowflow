@@ -37,7 +37,10 @@ async def test_prepare_document_success() -> None:
     assert result.chunks[0].embedding == [0.1, 0.2, 0.3]
     assert result.latency_ms >= 0
 
-    mocked_generate.assert_awaited_once_with([request.content])
+    mocked_generate.assert_awaited_once_with(
+        [request.content],
+        input_type="document",
+    )
 
 
 @pytest.mark.asyncio
@@ -54,7 +57,10 @@ async def test_prepare_long_document_in_batches() -> None:
 
     async def fake_generate_embeddings(
         texts: list[str],
+        input_type: str = "query",
     ) -> dict[str, object]:
+        assert input_type == "document"
+
         return {
             "model": "nomic-embed-text",
             "dimensions": 3,

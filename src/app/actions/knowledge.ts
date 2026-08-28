@@ -71,6 +71,7 @@ async function requestEmbeddingBatch(
       },
       body: JSON.stringify({
         texts,
+        input_type: "query",
       }),
       signal: AbortSignal.timeout(
         aiConfig.requestTimeoutMs

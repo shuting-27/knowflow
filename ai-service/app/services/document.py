@@ -24,7 +24,10 @@ async def prepare_document(
         max_chunks=request.max_chunks,
     )
 
-    embedding_result = await generate_embeddings([chunk.text for chunk in text_chunks])
+    embedding_result = await generate_embeddings(
+        [chunk.text for chunk in text_chunks],
+        input_type="document",
+    )
 
     embeddings = embedding_result["embeddings"]
 

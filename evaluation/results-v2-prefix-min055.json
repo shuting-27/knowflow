@@ -1,0 +1,437 @@
+{
+  "generatedAt": "2026-08-28T20:39:07.406Z",
+  "configuration": {
+    "topK": 5,
+    "minScore": 0.55,
+    "mmrLambda": 0.7,
+    "aiServiceUrl": "http://127.0.0.1:8000"
+  },
+  "summary": {
+    "dataset": "evaluation\\rag-retrieval.json",
+    "questions": 24,
+    "positiveQuestions": 20,
+    "negativeQuestions": 4,
+    "hitAt1": 0.2,
+    "hitAt3": 0.2,
+    "hitAt5": 0.2,
+    "mrr": 0.2,
+    "rejectAccuracy": 1,
+    "averageTotalLatencyMs": 1041.7251291666669,
+    "p95TotalLatencyMs": 1342.3507000000004,
+    "averageEmbeddingLatencyMs": 966.4162499999999,
+    "averageVectorLatencyMs": 52.38866250000001,
+    "p95VectorLatencyMs": 57.16819999999825
+  },
+  "details": [
+    {
+      "id": "architecture-01",
+      "question": "KnowFlow的前端、AI服务和数据库分别使用什么技术？",
+      "relevantIds": [
+        9
+      ],
+      "rankedIds": [
+        9
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 1342.35,
+      "embeddingLatencyMs": 1202.38,
+      "vectorLatencyMs": 30.47,
+      "results": [
+        {
+          "id": 9,
+          "title": "KnowFlow 系统架构",
+          "score": 0.62,
+          "denseScore": 0.7,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "architecture-02",
+      "question": "系统中Next.js与FastAPI分别承担什么职责？",
+      "relevantIds": [
+        9
+      ],
+      "rankedIds": [
+        6
+      ],
+      "rejected": false,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 945.79,
+      "embeddingLatencyMs": 866.39,
+      "vectorLatencyMs": 51.84,
+      "results": [
+        {
+          "id": 6,
+          "title": "FastAPI测试知识",
+          "score": 0.5964,
+          "denseScore": 0.6745,
+          "lexicalScore": 0.1538,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "indexing-01",
+      "question": "知识创建时如何进行文档分块和向量化？",
+      "relevantIds": [
+        10
+      ],
+      "rankedIds": [
+        10
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 959.63,
+      "embeddingLatencyMs": 884.83,
+      "vectorLatencyMs": 53.65,
+      "results": [
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.6444,
+          "denseScore": 0.6699,
+          "lexicalScore": 0.5,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "indexing-02",
+      "question": "为什么文本分块之间需要保留重叠区域？",
+      "relevantIds": [
+        10
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 950.89,
+      "embeddingLatencyMs": 880.02,
+      "vectorLatencyMs": 53.53,
+      "results": []
+    },
+    {
+      "id": "vector-01",
+      "question": "系统如何利用pgvector召回相关文本？",
+      "relevantIds": [
+        11
+      ],
+      "rankedIds": [
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 910.58,
+      "embeddingLatencyMs": 841.13,
+      "vectorLatencyMs": 53.84,
+      "results": [
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.6407,
+          "denseScore": 0.6508,
+          "lexicalScore": 0.5833,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "vector-02",
+      "question": "同一篇长文档召回多个分块时如何处理？",
+      "relevantIds": [
+        11
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1535.08,
+      "embeddingLatencyMs": 1461.3,
+      "vectorLatencyMs": 59.44,
+      "results": []
+    },
+    {
+      "id": "hybrid-01",
+      "question": "混合检索分数由哪些部分组成？",
+      "relevantIds": [
+        12
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1329.45,
+      "embeddingLatencyMs": 1238.97,
+      "vectorLatencyMs": 54.96,
+      "results": []
+    },
+    {
+      "id": "hybrid-02",
+      "question": "Embedding服务不可用时搜索还能工作吗？",
+      "relevantIds": [
+        12
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1127.19,
+      "embeddingLatencyMs": 1058.41,
+      "vectorLatencyMs": 53.15,
+      "results": []
+    },
+    {
+      "id": "mmr-01",
+      "question": "KnowFlow如何避免检索结果包含大量重复内容？",
+      "relevantIds": [
+        13
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1039.75,
+      "embeddingLatencyMs": 963.62,
+      "vectorLatencyMs": 57.17,
+      "results": []
+    },
+    {
+      "id": "mmr-02",
+      "question": "最大边际相关性排序同时考虑哪些因素？",
+      "relevantIds": [
+        13
+      ],
+      "rankedIds": [
+        13
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 1076.47,
+      "embeddingLatencyMs": 996.06,
+      "vectorLatencyMs": 52.62,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5603,
+          "denseScore": 0.5379,
+          "lexicalScore": 0.6875,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "transaction-01",
+      "question": "更新知识时某个数据库操作失败会发生什么？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1005.43,
+      "embeddingLatencyMs": 934.99,
+      "vectorLatencyMs": 50.81,
+      "results": []
+    },
+    {
+      "id": "transaction-02",
+      "question": "删除知识后关联的向量分块如何清理？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1031.66,
+      "embeddingLatencyMs": 966.06,
+      "vectorLatencyMs": 51.38,
+      "results": []
+    },
+    {
+      "id": "grounding-01",
+      "question": "知识不足时系统是否会自行编造答案？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 908.18,
+      "embeddingLatencyMs": 845.59,
+      "vectorLatencyMs": 48.55,
+      "results": []
+    },
+    {
+      "id": "grounding-02",
+      "question": "用户如何核对智能问答使用了哪些知识来源？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 950.07,
+      "embeddingLatencyMs": 886.84,
+      "vectorLatencyMs": 52.47,
+      "results": []
+    },
+    {
+      "id": "performance-01",
+      "question": "系统记录了哪些大模型性能指标？",
+      "relevantIds": [
+        16
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 937.17,
+      "embeddingLatencyMs": 860.56,
+      "vectorLatencyMs": 52.41,
+      "results": []
+    },
+    {
+      "id": "performance-02",
+      "question": "怎样减少Ollama每次请求重新加载模型的时间？",
+      "relevantIds": [
+        16
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 908.48,
+      "embeddingLatencyMs": 846.33,
+      "vectorLatencyMs": 53.92,
+      "results": []
+    },
+    {
+      "id": "pipeline-01",
+      "question": "从知识创建到向量索引写入需要经过哪些处理？",
+      "relevantIds": [
+        10,
+        14
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 913.65,
+      "embeddingLatencyMs": 841.44,
+      "vectorLatencyMs": 51.77,
+      "results": []
+    },
+    {
+      "id": "pipeline-02",
+      "question": "用户提问后系统如何完成向量召回和结果排序？",
+      "relevantIds": [
+        11,
+        12,
+        13
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 908.37,
+      "embeddingLatencyMs": 844.95,
+      "vectorLatencyMs": 53.63,
+      "results": []
+    },
+    {
+      "id": "pipeline-03",
+      "question": "如何保证知识正文与向量索引不会出现不一致？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 990.18,
+      "embeddingLatencyMs": 918.06,
+      "vectorLatencyMs": 53.21,
+      "results": []
+    },
+    {
+      "id": "pipeline-04",
+      "question": "如何约束模型依据检索内容回答并提供证据？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": false,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1065.87,
+      "embeddingLatencyMs": 997.54,
+      "vectorLatencyMs": 53.53,
+      "results": []
+    },
+    {
+      "id": "reject-01",
+      "question": "公司员工请假审批需要经过哪些部门？",
+      "relevantIds": [],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": true,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1103.88,
+      "embeddingLatencyMs": 1024.01,
+      "vectorLatencyMs": 54.17,
+      "results": []
+    },
+    {
+      "id": "reject-02",
+      "question": "明天北京的天气和降雨概率是多少？",
+      "relevantIds": [],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": true,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1042.88,
+      "embeddingLatencyMs": 970.96,
+      "vectorLatencyMs": 53.45,
+      "results": []
+    },
+    {
+      "id": "reject-03",
+      "question": "卷积神经网络如何完成高光谱图像分类？",
+      "relevantIds": [],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": true,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 982.52,
+      "embeddingLatencyMs": 905.09,
+      "vectorLatencyMs": 54.32,
+      "results": []
+    },
+    {
+      "id": "reject-04",
+      "question": "如何实现用户注册、密码加密和权限认证？",
+      "relevantIds": [],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": true,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1035.89,
+      "embeddingLatencyMs": 958.46,
+      "vectorLatencyMs": 53.04,
+      "results": []
+    }
+  ]
+}

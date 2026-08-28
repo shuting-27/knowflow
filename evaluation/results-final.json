@@ -1,0 +1,1026 @@
+{
+  "generatedAt": "2026-08-28T20:52:55.729Z",
+  "configuration": {
+    "topK": 5,
+    "minScore": 0.35,
+    "mmrLambda": 0.7,
+    "aiServiceUrl": "http://127.0.0.1:8000"
+  },
+  "summary": {
+    "dataset": "evaluation\\rag-retrieval.json",
+    "questions": 24,
+    "positiveQuestions": 20,
+    "negativeQuestions": 4,
+    "hitAt1": 0.8,
+    "hitAt3": 0.95,
+    "hitAt5": 1,
+    "mrr": 0.8791666666666667,
+    "rejectAccuracy": 1,
+    "averageTotalLatencyMs": 727.094566666667,
+    "p95TotalLatencyMs": 1019.6222000000002,
+    "averageEmbeddingLatencyMs": 655.4120833333332,
+    "averageVectorLatencyMs": 51.43533749999989,
+    "p95VectorLatencyMs": 53.425999999999476
+  },
+  "details": [
+    {
+      "id": "architecture-01",
+      "question": "KnowFlow的前端、AI服务和数据库分别使用什么技术？",
+      "relevantIds": [
+        9
+      ],
+      "rankedIds": [
+        9,
+        8,
+        15,
+        6,
+        7
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 1019.62,
+      "embeddingLatencyMs": 848.82,
+      "vectorLatencyMs": 74.01,
+      "results": [
+        {
+          "id": 9,
+          "title": "KnowFlow 系统架构",
+          "score": 0.62,
+          "denseScore": 0.7,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.497,
+          "denseScore": 0.5553,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 2
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.3966,
+          "denseScore": 0.4568,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 0
+        },
+        {
+          "id": 6,
+          "title": "FastAPI测试知识",
+          "score": 0.435,
+          "denseScore": 0.4725,
+          "lexicalScore": 0.2222,
+          "chunkIndex": 0
+        },
+        {
+          "id": 7,
+          "title": "Python文档预处理测试",
+          "score": 0.4232,
+          "denseScore": 0.4783,
+          "lexicalScore": 0.1111,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "architecture-02",
+      "question": "系统中Next.js与FastAPI分别承担什么职责？",
+      "relevantIds": [
+        9,
+        6
+      ],
+      "rankedIds": [
+        6,
+        9
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 687.84,
+      "embeddingLatencyMs": 624.04,
+      "vectorLatencyMs": 50.93,
+      "results": [
+        {
+          "id": 6,
+          "title": "FastAPI测试知识",
+          "score": 0.5964,
+          "denseScore": 0.6745,
+          "lexicalScore": 0.1538,
+          "chunkIndex": 0
+        },
+        {
+          "id": 9,
+          "title": "KnowFlow 系统架构",
+          "score": 0.4734,
+          "denseScore": 0.5162,
+          "lexicalScore": 0.2308,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "indexing-01",
+      "question": "知识创建时如何进行文档分块和向量化？",
+      "relevantIds": [
+        10
+      ],
+      "rankedIds": [
+        10,
+        8,
+        7,
+        11,
+        14
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 667.73,
+      "embeddingLatencyMs": 603.51,
+      "vectorLatencyMs": 47.63,
+      "results": [
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.6444,
+          "denseScore": 0.6699,
+          "lexicalScore": 0.5,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5324,
+          "denseScore": 0.5822,
+          "lexicalScore": 0.25,
+          "chunkIndex": 2
+        },
+        {
+          "id": 7,
+          "title": "Python文档预处理测试",
+          "score": 0.5248,
+          "denseScore": 0.5623,
+          "lexicalScore": 0.3125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.4703,
+          "denseScore": 0.5091,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.4982,
+          "denseScore": 0.5531,
+          "lexicalScore": 0.1875,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "indexing-02",
+      "question": "为什么文本分块之间需要保留重叠区域？",
+      "relevantIds": [
+        10
+      ],
+      "rankedIds": [
+        10,
+        7,
+        8,
+        11,
+        12
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 661.37,
+      "embeddingLatencyMs": 593.6,
+      "vectorLatencyMs": 48.81,
+      "results": [
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.5055,
+          "denseScore": 0.5396,
+          "lexicalScore": 0.3125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 7,
+          "title": "Python文档预处理测试",
+          "score": 0.4641,
+          "denseScore": 0.5019,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.3972,
+          "denseScore": 0.4342,
+          "lexicalScore": 0.1875,
+          "chunkIndex": 2
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.3838,
+          "denseScore": 0.4074,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.359,
+          "denseScore": 0.4114,
+          "lexicalScore": 0.0625,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "vector-01",
+      "question": "系统如何利用pgvector召回相关文本？",
+      "relevantIds": [
+        11
+      ],
+      "rankedIds": [
+        11,
+        16,
+        14,
+        15,
+        8
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 654.36,
+      "embeddingLatencyMs": 589.89,
+      "vectorLatencyMs": 52.14,
+      "results": [
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.6407,
+          "denseScore": 0.6508,
+          "lexicalScore": 0.5833,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.4338,
+          "denseScore": 0.4662,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.432,
+          "denseScore": 0.4788,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4026,
+          "denseScore": 0.4296,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.4267,
+          "denseScore": 0.4726,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "vector-02",
+      "question": "同一篇长文档召回多个分块时如何处理？",
+      "relevantIds": [
+        11
+      ],
+      "rankedIds": [
+        11,
+        10,
+        14,
+        13,
+        7
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 668.62,
+      "embeddingLatencyMs": 588.1,
+      "vectorLatencyMs": 53.27,
+      "results": [
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.5406,
+          "denseScore": 0.5368,
+          "lexicalScore": 0.5625,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.4775,
+          "denseScore": 0.5287,
+          "lexicalScore": 0.1875,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.4059,
+          "denseScore": 0.4554,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.3738,
+          "denseScore": 0.4397,
+          "lexicalScore": 0,
+          "chunkIndex": 0
+        },
+        {
+          "id": 7,
+          "title": "Python文档预处理测试",
+          "score": 0.4165,
+          "denseScore": 0.4569,
+          "lexicalScore": 0.1875,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "hybrid-01",
+      "question": "混合检索分数由哪些部分组成？",
+      "relevantIds": [
+        12
+      ],
+      "rankedIds": [
+        12
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 736.78,
+      "embeddingLatencyMs": 676.71,
+      "vectorLatencyMs": 51.13,
+      "results": [
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.5255,
+          "denseScore": 0.5447,
+          "lexicalScore": 0.4167,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "hybrid-02",
+      "question": "Embedding服务不可用时搜索还能工作吗？",
+      "relevantIds": [
+        12
+      ],
+      "rankedIds": [
+        12
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 668.99,
+      "embeddingLatencyMs": 602.46,
+      "vectorLatencyMs": 49.2,
+      "results": [
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.3755,
+          "denseScore": 0.3738,
+          "lexicalScore": 0.3846,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "mmr-01",
+      "question": "KnowFlow如何避免检索结果包含大量重复内容？",
+      "relevantIds": [
+        13
+      ],
+      "rankedIds": [
+        15,
+        12,
+        8,
+        13,
+        10
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 4,
+      "totalLatencyMs": 663.75,
+      "embeddingLatencyMs": 593.29,
+      "vectorLatencyMs": 48.68,
+      "results": [
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.5356,
+          "denseScore": 0.586,
+          "lexicalScore": 0.25,
+          "chunkIndex": 0
+        },
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.5315,
+          "denseScore": 0.6033,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5014,
+          "denseScore": 0.5679,
+          "lexicalScore": 0.125,
+          "chunkIndex": 1
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5156,
+          "denseScore": 0.5514,
+          "lexicalScore": 0.3125,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.4771,
+          "denseScore": 0.5393,
+          "lexicalScore": 0.125,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "mmr-02",
+      "question": "最大边际相关性排序同时考虑哪些因素？",
+      "relevantIds": [
+        13
+      ],
+      "rankedIds": [
+        13
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 659.34,
+      "embeddingLatencyMs": 598.41,
+      "vectorLatencyMs": 49.67,
+      "results": [
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.5603,
+          "denseScore": 0.5379,
+          "lexicalScore": 0.6875,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "transaction-01",
+      "question": "更新知识时某个数据库操作失败会发生什么？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [
+        8,
+        14
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 2,
+      "totalLatencyMs": 658.71,
+      "embeddingLatencyMs": 600.48,
+      "vectorLatencyMs": 52.02,
+      "results": [
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5012,
+          "denseScore": 0.5112,
+          "lexicalScore": 0.4444,
+          "chunkIndex": 2
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.4918,
+          "denseScore": 0.51,
+          "lexicalScore": 0.3889,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "transaction-02",
+      "question": "删除知识后关联的向量分块如何清理？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [
+        14,
+        11,
+        10,
+        13,
+        8
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 790.46,
+      "embeddingLatencyMs": 728.04,
+      "vectorLatencyMs": 49.75,
+      "results": [
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.5277,
+          "denseScore": 0.5502,
+          "lexicalScore": 0.4,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.4702,
+          "denseScore": 0.5179,
+          "lexicalScore": 0.2,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.415,
+          "denseScore": 0.453,
+          "lexicalScore": 0.2,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.3754,
+          "denseScore": 0.4182,
+          "lexicalScore": 0.1333,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.4587,
+          "denseScore": 0.5044,
+          "lexicalScore": 0.2,
+          "chunkIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "grounding-01",
+      "question": "知识不足时系统是否会自行编造答案？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [
+        15
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 657.89,
+      "embeddingLatencyMs": 598.76,
+      "vectorLatencyMs": 52.12,
+      "results": [
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4296,
+          "denseScore": 0.4349,
+          "lexicalScore": 0.4,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "grounding-02",
+      "question": "用户如何核对智能问答使用了哪些知识来源？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [
+        15,
+        9,
+        11,
+        13,
+        8
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 677.91,
+      "embeddingLatencyMs": 613.72,
+      "vectorLatencyMs": 47.01,
+      "results": [
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4934,
+          "denseScore": 0.5412,
+          "lexicalScore": 0.2222,
+          "chunkIndex": 0
+        },
+        {
+          "id": 9,
+          "title": "KnowFlow 系统架构",
+          "score": 0.3646,
+          "denseScore": 0.4093,
+          "lexicalScore": 0.1111,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.3771,
+          "denseScore": 0.4143,
+          "lexicalScore": 0.1667,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.3564,
+          "denseScore": 0.3996,
+          "lexicalScore": 0.1111,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.351,
+          "denseScore": 0.4031,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "performance-01",
+      "question": "系统记录了哪些大模型性能指标？",
+      "relevantIds": [
+        16
+      ],
+      "rankedIds": [
+        16
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 656.73,
+      "embeddingLatencyMs": 587.74,
+      "vectorLatencyMs": 50.77,
+      "results": [
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.4714,
+          "denseScore": 0.5003,
+          "lexicalScore": 0.3077,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "performance-02",
+      "question": "怎样减少Ollama每次请求重新加载模型的时间？",
+      "relevantIds": [
+        16
+      ],
+      "rankedIds": [
+        16
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 670.22,
+      "embeddingLatencyMs": 602.15,
+      "vectorLatencyMs": 48.78,
+      "results": [
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.5099,
+          "denseScore": 0.5584,
+          "lexicalScore": 0.2353,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "pipeline-01",
+      "question": "从知识创建到向量索引写入需要经过哪些处理？",
+      "relevantIds": [
+        10,
+        14
+      ],
+      "rankedIds": [
+        8,
+        10,
+        14,
+        15,
+        11
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 2,
+      "totalLatencyMs": 674.83,
+      "embeddingLatencyMs": 602.64,
+      "vectorLatencyMs": 50.72,
+      "results": [
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5396,
+          "denseScore": 0.5884,
+          "lexicalScore": 0.2632,
+          "chunkIndex": 2
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.4998,
+          "denseScore": 0.5416,
+          "lexicalScore": 0.2632,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.4808,
+          "denseScore": 0.5193,
+          "lexicalScore": 0.2632,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.3686,
+          "denseScore": 0.4243,
+          "lexicalScore": 0.0526,
+          "chunkIndex": 0
+        },
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.3873,
+          "denseScore": 0.4371,
+          "lexicalScore": 0.1053,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "pipeline-02",
+      "question": "用户提问后系统如何完成向量召回和结果排序？",
+      "relevantIds": [
+        11,
+        12,
+        13
+      ],
+      "rankedIds": [
+        11,
+        13,
+        15,
+        16,
+        8
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 728.79,
+      "embeddingLatencyMs": 652.92,
+      "vectorLatencyMs": 53.43,
+      "results": [
+        {
+          "id": 11,
+          "title": "pgvector 语义召回",
+          "score": 0.4845,
+          "denseScore": 0.5235,
+          "lexicalScore": 0.2632,
+          "chunkIndex": 0
+        },
+        {
+          "id": 13,
+          "title": "MMR 去冗余排序",
+          "score": 0.4433,
+          "denseScore": 0.5029,
+          "lexicalScore": 0.1053,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.435,
+          "denseScore": 0.484,
+          "lexicalScore": 0.1579,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.3991,
+          "denseScore": 0.451,
+          "lexicalScore": 0.1053,
+          "chunkIndex": 0
+        },
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.3977,
+          "denseScore": 0.4586,
+          "lexicalScore": 0.0526,
+          "chunkIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "pipeline-03",
+      "question": "如何保证知识正文与向量索引不会出现不一致？",
+      "relevantIds": [
+        14
+      ],
+      "rankedIds": [
+        8,
+        12,
+        14,
+        10,
+        15
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 3,
+      "totalLatencyMs": 722,
+      "embeddingLatencyMs": 613.39,
+      "vectorLatencyMs": 52.17,
+      "results": [
+        {
+          "id": 8,
+          "title": "pgvector事务写入测试",
+          "score": 0.5367,
+          "denseScore": 0.5571,
+          "lexicalScore": 0.4211,
+          "chunkIndex": 2
+        },
+        {
+          "id": 12,
+          "title": "混合检索策略",
+          "score": 0.41,
+          "denseScore": 0.4638,
+          "lexicalScore": 0.1053,
+          "chunkIndex": 0
+        },
+        {
+          "id": 14,
+          "title": "数据事务一致性",
+          "score": 0.51,
+          "denseScore": 0.5164,
+          "lexicalScore": 0.4737,
+          "chunkIndex": 0
+        },
+        {
+          "id": 10,
+          "title": "文档索引流程",
+          "score": 0.4202,
+          "denseScore": 0.4664,
+          "lexicalScore": 0.1579,
+          "chunkIndex": 0
+        },
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.3764,
+          "denseScore": 0.4335,
+          "lexicalScore": 0.0526,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "pipeline-04",
+      "question": "如何约束模型依据检索内容回答并提供证据？",
+      "relevantIds": [
+        15
+      ],
+      "rankedIds": [
+        15,
+        16
+      ],
+      "rejected": false,
+      "passed": true,
+      "firstRelevantRank": 1,
+      "totalLatencyMs": 656.23,
+      "embeddingLatencyMs": 601.65,
+      "vectorLatencyMs": 48.9,
+      "results": [
+        {
+          "id": 15,
+          "title": "RAG 回答与来源追踪",
+          "score": 0.4809,
+          "denseScore": 0.507,
+          "lexicalScore": 0.3333,
+          "chunkIndex": 0
+        },
+        {
+          "id": 16,
+          "title": "性能监控与模型常驻",
+          "score": 0.3552,
+          "denseScore": 0.4081,
+          "lexicalScore": 0.0556,
+          "chunkIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "reject-01",
+      "question": "公司员工请假审批需要经过哪些部门？",
+      "relevantIds": [],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": true,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 713.09,
+      "embeddingLatencyMs": 649.49,
+      "vectorLatencyMs": 51.24,
+      "results": []
+    },
+    {
+      "id": "reject-02",
+      "question": "明天北京的天气和降雨概率是多少？",
+      "relevantIds": [],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": true,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 771.47,
+      "embeddingLatencyMs": 707.27,
+      "vectorLatencyMs": 53.41,
+      "results": []
+    },
+    {
+      "id": "reject-03",
+      "question": "卷积神经网络如何完成高光谱图像分类？",
+      "relevantIds": [],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": true,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 1132.18,
+      "embeddingLatencyMs": 1062.48,
+      "vectorLatencyMs": 48.73,
+      "results": []
+    },
+    {
+      "id": "reject-04",
+      "question": "如何实现用户注册、密码加密和权限认证？",
+      "relevantIds": [],
+      "rankedIds": [],
+      "rejected": true,
+      "passed": true,
+      "firstRelevantRank": null,
+      "totalLatencyMs": 851.36,
+      "embeddingLatencyMs": 790.33,
+      "vectorLatencyMs": 49.95,
+      "results": []
+    }
+  ]
+}
